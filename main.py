@@ -15,12 +15,11 @@ df = df.filter(["Period", "Phone number", "Userid", "Volume in KiB", "Product de
 
 
 class User():
-    def __init__(self, Period, Phone_number, Userid, Volume_in_KiB_used, Volume_in_KiB_booked):
+    def __init__(self, Phone_number, Userid, Volume_in_KiB_used_Month1, Volume_in_KiB_booked_Month1, Volume_in_KiB_used_Month2, Volume_in_KiB_booked_Month2, Volume_in_KiB_used_Month3, Volume_in_KiB_booked_Month3):
         self.Phone_number=Phone_number
         self.Userid=Userid
         self.Volume_in_KiB_used = Volume_in_KiB_used
-        self.Volume_in_KiB_booked = Volume_in_KiB_booked
-        self.Period = Period
+        self.Volume_in_KiB_booked = Volume_in_KiB_booke
     
 user1 = User()
 
