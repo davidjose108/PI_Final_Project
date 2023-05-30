@@ -2,8 +2,7 @@
 # Student = David Garrido de Sousa
 # Project = Data Plan Adjustment
 
-#The purporse of this project is to automatize the mobile data plan adjustment in a big compnay 
-#according to the data consumption of the last three months. 
+#The purporse of this project is to automatize the mobile data plan adjustment in a big company according to the data consumption pf each user of the last three months. 
 
 
 
