@@ -5,32 +5,23 @@
 #The purporse of this project is to automatize the mobile data plan adjustment in a big company according to the data consumption pf each user of the last three months. 
 
 
+# Convert file into a dataframe
+df = pd.read_csv(r'C:\Users\v-davidgarr\Documents\Data_Volume_042023.csv')
 
- 
-import pandas as pd
+# Rewriting the df with the important rows 
+df_bookeddata_month1 = df.loc[df["Product description"] == "INFO ZU IHREM DATENVOLUMEN DES ABRECHNUNGSMONATS IM INLAND VERTRAGLICH VEREINBARTES DATENVOLUMEN"]
 
-df = pd.read_csv(r'')
-df = df.filter(["Period", "Phone number", "Userid", "Volume in KiB", "Product description"])
+# Keeping the columns that are important
+df_bookeddata_month1 = df_bookeddata_month1.filter(["Period", "Phone number", "Userid", "Volume in KiB"])
 
+# Renaming the columns/ inplace: Makes changes in original Data Frame if True.
+df_bookeddata_month1.rename(columns={'Volume in KiB': 'Booked Data Volume for Month 1'}, inplace = True)
 
-class User():
-    def __init__(self, Phone_number, Userid, Volume_in_KiB_used_Month1, Volume_in_KiB_booked_Month1, Volume_in_KiB_used_Month2, Volume_in_KiB_booked_Month2, Volume_in_KiB_used_Month3, Volume_in_KiB_booked_Month3):
-        self.Phone_number=Phone_number
-        self.Userid=Userid
-        self.Volume_in_KiB_used = Volume_in_KiB_used
-        self.Volume_in_KiB_booked = Volume_in_KiB_booke
-    
-user1 = User()
+df_useddata_month1= df.loc[df["Product description"] == "INFO ZU IHREM DATENVOLUMEN DES ABRECHNUNGSMONATS IM INLAND VERBRAUCHTES DATENVOLUMEN MIT HOHER GESCHWINDIGKEIT"]
+df_useddata_month1 = df_useddata_month1.filter(["Phone number", "Volume in KiB"])
+df_useddata_month1.rename(columns={'Volume in KiB': 'Used Data Volume for Month 1'}, inplace = True)
 
-val = df._get_value(2, 'Phone number')
-print(val)
-    
-df_usedvolume= df.loc[df["Product description"] == "INFO ZU IHREM DATENVOLUMEN DES ABRECHNUNGSMONATS IM INLAND VERBRAUCHTES DATENVOLUMEN MIT HOHER GESCHWINDIGKEIT"]
+# Merging the data frames 
 
-vol = df_usedvolume._get_value(1, 'Volume in KiB')
-print(vol)
-
-df_bookedvolume = df.loc[df["Product description"] == "INFO ZU IHREM DATENVOLUMEN DES ABRECHNUNGSMONATS IM INLAND VERTRAGLICH VEREINBARTES DATENVOLUMEN"]
-vbl = df_bookedvolume._get_value(0, 'Volume in KiB')
-
-print(vbl)
+df_month1 = pd.merge(df_bookeddata_month1, df_useddata_month1, on='Phone number')
+print(df_month1)
