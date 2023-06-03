@@ -38,14 +38,15 @@ def rename_DF(a,b):
     a.rename(columns={'Booked Data Volume': f'Booked Data Volume for Month {b}','Used Data Volume': f'Used Data Volume for Month {b}' }, inplace = True)
     return a 
 
-df_month1 = CSV_to_DF(r'C:\Users\v-davidgarr\Documents\Data Adjustment_Python Project\Data_Volume_042023.csv')
+df_month1 = CSV_to_DF(r"test_month1.csv")
 rename_DF(df_month1,1)
 
-df_month2 = CSV_to_DF(r'C:\Users\v-davidgarr\Documents\Data Adjustment_Python Project\Data_Volume_032023.csv')
+
+df_month2 = CSV_to_DF(r"test_month2.csv")
 df_month2=filter_DF(df_month2)
 rename_DF(df_month2,2)
 
-df_month3 = CSV_to_DF(r'C:\Users\v-davidgarr\Documents\Data Adjustment_Python Project\Data_Volume_022023.csv')
+df_month3 = CSV_to_DF(r"test_month3.csv")
 df_month3=filter_DF(df_month3)
 rename_DF(df_month3,3)
 
@@ -84,7 +85,7 @@ for i in df_final.index:
             if -10000000 < (data_consumption_average - data_plan_average) < 10000000:
                 data_adjustment.append('It is not necessary to propose a data plan adjustment. \nThe current data plan and data consumption are too close. ')
             else:
-                data_adjustment.append(f'The proposed data plan for this phone number is: {new_data_plan(data_consumption_average)} GB')
+                data_adjustment.append(f'The proposed data plan for this phone number is: {new_data_plan(data_consumption_average)} KiB')
 
 df_final['Data Consumption Average'] = data_cons_avrg_column 
 df_final['Data Consumption Standard Deviation'] = data_cons_std_column
