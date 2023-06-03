@@ -51,34 +51,43 @@ rename_DF(df_month3,3)
 
 df_final=pd.merge(pd.merge(df_month1,df_month2,on='Phone number'),df_month3,on='Phone number')
 
-# Iterating over the Data Frame 
+# Creating new columns 
+data_cons_avrg_column = []
+data_cons_std_column = []
+data_adjustment = []
 
+# Iterating over the Data Frame 
 for i in df_final.index:
     data_consumption = [float(df_final.loc[i,"Used Data Volume for Month 1"]), float(df_final.loc[i,"Used Data Volume for Month 2"]), float(df_final.loc[i,"Used Data Volume for Month 3"])]
-   # print (data_consumption)
     data_consumption_average = statistics.mean(data_consumption)
+    data_cons_avrg_column.append(data_consumption_average)
     #print (data_consumption)
     data_consumption_stdv = statistics.stdev(data_consumption)
+    data_cons_std_column.append(data_consumption_stdv)
     #print(data_consumption_stdv)
     data_plan = [df_final.loc[i,"Booked Data Volume for Month 1"], df_final.loc[i,"Booked Data Volume for Month 2"], df_final.loc[i,"Booked Data Volume for Month 3"]]
     data_plan_average = statistics.mean(data_plan)
     #print (data_plan)
     def new_data_plan(y):
-        data_plan_list = [8, 10, 12, 15, 20, 30, 50]
+        data_plan_list = [8000000, 10000000, 12000000, 15000000, 20000000, 30000000, 50000000]
         closest = min(data_plan_list, key=lambda x: abs(x-y))
         return closest 
 
     discrepancy = data_consumption_average - data_plan_average
 
-    if df_final.loc[i,"Booked Data Volume for Month 1"] != df_final.loc[i,"Used Data Volume for Month 2"] or df_final.loc[i,"Booked Data Volume for Month 1"] != df_final.loc[i,"Used Data Volume for Month 3"]:
-        a = 1 #print ('It is not possible to propose a data plan adjustment. \nThe data plan has been changed in the last three months.')
+    if df_final.loc[i,"Booked Data Volume for Month 1"] != df_final.loc[i,"Booked Data Volume for Month 2"] or df_final.loc[i,"Booked Data Volume for Month 1"] != df_final.loc[i,"Booked Data Volume for Month 3"]:
+        data_adjustment.append('It is not possible to propose a data plan adjustment. The data plan has been changed in the last three months.')
     else:
-        if data_consumption_stdv >= 5.00:
-            a = 1 # print ('It is not possible to propose a data plan adjustment. \nThere is too much difference between the data consumption.')
+        if data_consumption_stdv >= 5000000.00:
+            data_adjustment.append('It is not possible to propose a data plan adjustment. \nThere is too much difference between the data consumption.')
         else:
-            if -10 < (data_consumption_average - data_plan_average) < 10:
-                a = 1 #print ('It is not necessary to propose a data plan adjustment. \nThe current data plan and data consumption are too close. ')
+            if -10000000 < (data_consumption_average - data_plan_average) < 10000000:
+                data_adjustment.append('It is not necessary to propose a data plan adjustment. \nThe current data plan and data consumption are too close. ')
             else:
-                print (f'The proposed data plan for this phone number is: {new_data_plan(data_consumption)} GB')
+                data_adjustment.append(f'The proposed data plan for this phone number is: {new_data_plan(data_consumption_average)} GB')
 
+df_final['Data Consumption Average'] = data_cons_avrg_column 
+df_final['Data Consumption Standard Deviation'] = data_cons_std_column
+df_final['Data Adjustment'] = data_adjustment
 
+df_final.to_excel("output.xlsx")  
