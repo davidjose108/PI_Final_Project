@@ -8,9 +8,11 @@
 import pandas as pd
 import statistics 
 
-def CSV_to_DF(file,number_of_month):
+data_plan_list = [8000000, 10000000, 12000000, 15000000, 20000000, 30000000, 50000000]
+
+def CSV_to_DF(file,a):
     # Convert file into a dataframe
-    df = pd.read_csv(file)
+    df = pd.read_excel(file)
 
     # Rewriting the df with the important rows 
     df_bookeddata = df.loc[df["Product description"] == "INFO ZU IHREM DATENVOLUMEN DES ABRECHNUNGSMONATS IM INLAND VERTRAGLICH VEREINBARTES DATENVOLUMEN"]
@@ -36,11 +38,11 @@ def CSV_to_DF(file,number_of_month):
     return df_month 
 
 
-df_month1 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_022023.csv",1)
+df_month1 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_022023.xlsx",1)
 
-df_month2 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_032023.csv",2)
+df_month2 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_032023.xlsx",2)
 
-df_month3 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_042023.csv",3)
+df_month3 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_042023.xlsx",3)
 
 df_final=pd.merge(pd.merge(df_month1,df_month2,on='Phone number'),df_month3,on='Phone number')
 
@@ -60,7 +62,6 @@ for i in df_final.index:
     data_plan_average = statistics.mean(data_plan)
     
     def new_data_plan(y):
-        data_plan_list = [8000000, 10000000, 12000000, 15000000, 20000000, 30000000, 50000000]
         closest = min(data_plan_list, key=lambda x: abs(x-y))
         return closest 
 
