@@ -4,13 +4,16 @@
 
 #The purporse of this project is to automatize the mobile data plan adjustment in a big company according to the data consumption pf each user of the last three months. 
 
-
 import pandas as pd
 import statistics 
 
-data_plan_list = [8000000, 10000000, 12000000, 15000000, 20000000, 30000000, 50000000]
 
-def CSV_to_DF(file,a):
+data_plan_list = [8000000, 10000000, 12000000, 15000000, 20000000, 30000000, 50000000]
+df_month1 = input('Please enter file path for month 1 to be analyzed: ')
+df_month2 = input('Please enter file path for month 2 to be analyzed: ')
+df_month3 = input('Please enter file path for month 3 to be analyzed: ')
+
+def file_to_DF(file,number_of_month):
     # Convert file into a dataframe
     df = pd.read_excel(file)
 
@@ -30,19 +33,21 @@ def CSV_to_DF(file,a):
     # Merging the data frames 
     df_month = pd.merge(df_bookeddata, df_useddata, on='Phone number')
 
-    if a != 1:
+    if number_of_month != 1:
         df_month = df_month.filter(["Phone number", "Booked Data Volume", "Used Data Volume"])
 
-    df_month.rename(columns={'Booked Data Volume': f'Booked Data Volume for Month {a}','Used Data Volume': f'Used Data Volume for Month {a}' }, inplace = True)
+    df_month.rename(columns={'Booked Data Volume': f'Booked Data Volume for Month {number_of_month}','Used Data Volume': f'Used Data Volume for Month {number_of_month}' }, inplace = True)
 
     return df_month 
 
 
-df_month1 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_022023.xlsx",1)
+#Calling up the functions
 
-df_month2 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_032023.xlsx",2)
+df_month1=file_to_DF(df_month1,1)
 
-df_month3 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_042023.xlsx",3)
+df_month2=file_to_DF(df_month2,2)
+
+df_month3=file_to_DF(df_month3,3)
 
 df_final=pd.merge(pd.merge(df_month1,df_month2,on='Phone number'),df_month3,on='Phone number')
 
