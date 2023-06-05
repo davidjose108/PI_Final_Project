@@ -8,47 +8,39 @@
 import pandas as pd
 import statistics 
 
-def CSV_to_DF(file):
-# Convert file into a dataframe
+def CSV_to_DF(file,number_of_month):
+    # Convert file into a dataframe
     df = pd.read_csv(file)
 
-# Rewriting the df with the important rows 
+    # Rewriting the df with the important rows 
     df_bookeddata = df.loc[df["Product description"] == "INFO ZU IHREM DATENVOLUMEN DES ABRECHNUNGSMONATS IM INLAND VERTRAGLICH VEREINBARTES DATENVOLUMEN"]
 
-# Keeping the columns that are important
+    # Keeping the columns that are important
     df_bookeddata = df_bookeddata.filter(["Period", "Phone number", "Userid", "Volume in KiB"])
 
-# Renaming the columns/ inplace: Makes changes in original Data Frame if True.
+    # Renaming the columns/ inplace: Makes changes in original Data Frame if True.
     df_bookeddata.rename(columns={'Volume in KiB': 'Booked Data Volume'}, inplace = True)
 
     df_useddata= df.loc[df["Product description"] == "INFO ZU IHREM DATENVOLUMEN DES ABRECHNUNGSMONATS IM INLAND VERBRAUCHTES DATENVOLUMEN MIT HOHER GESCHWINDIGKEIT"]
     df_useddata = df_useddata.filter(["Phone number", "Volume in KiB"])
     df_useddata.rename(columns={'Volume in KiB': 'Used Data Volume'}, inplace = True)
 
-# Merging the data frames 
-
+    # Merging the data frames 
     df_month = pd.merge(df_bookeddata, df_useddata, on='Phone number')
-    return df_month
 
-def filter_DF(a):
-    a = a.filter(["Phone number", "Booked Data Volume", "Used Data Volume"])
-    return a 
+    if a != 1:
+        df_month = df_month.filter(["Phone number", "Booked Data Volume", "Used Data Volume"])
 
-def rename_DF(a,b):
-    a.rename(columns={'Booked Data Volume': f'Booked Data Volume for Month {b}','Used Data Volume': f'Used Data Volume for Month {b}' }, inplace = True)
-    return a 
+    df_month.rename(columns={'Booked Data Volume': f'Booked Data Volume for Month {a}','Used Data Volume': f'Used Data Volume for Month {a}' }, inplace = True)
 
-df_month1 = CSV_to_DF(r"test_month1.csv")
-rename_DF(df_month1,1)
+    return df_month 
 
 
-df_month2 = CSV_to_DF(r"test_month2.csv")
-df_month2=filter_DF(df_month2)
-rename_DF(df_month2,2)
+df_month1 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_022023.csv",1)
 
-df_month3 = CSV_to_DF(r"test_month3.csv")
-df_month3=filter_DF(df_month3)
-rename_DF(df_month3,3)
+df_month2 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_032023.csv",2)
+
+df_month3 = CSV_to_DF(r"C:\Users\v-davidgarr\Documents\Data_Adjustment_Project\Data Adjustment_Python Project\Data_Volume_042023.csv",3)
 
 df_final=pd.merge(pd.merge(df_month1,df_month2,on='Phone number'),df_month3,on='Phone number')
 
@@ -62,13 +54,11 @@ for i in df_final.index:
     data_consumption = [float(df_final.loc[i,"Used Data Volume for Month 1"]), float(df_final.loc[i,"Used Data Volume for Month 2"]), float(df_final.loc[i,"Used Data Volume for Month 3"])]
     data_consumption_average = statistics.mean(data_consumption)
     data_cons_avrg_column.append(data_consumption_average)
-    #print (data_consumption)
     data_consumption_stdv = statistics.stdev(data_consumption)
     data_cons_std_column.append(data_consumption_stdv)
-    #print(data_consumption_stdv)
     data_plan = [df_final.loc[i,"Booked Data Volume for Month 1"], df_final.loc[i,"Booked Data Volume for Month 2"], df_final.loc[i,"Booked Data Volume for Month 3"]]
     data_plan_average = statistics.mean(data_plan)
-    #print (data_plan)
+    
     def new_data_plan(y):
         data_plan_list = [8000000, 10000000, 12000000, 15000000, 20000000, 30000000, 50000000]
         closest = min(data_plan_list, key=lambda x: abs(x-y))
@@ -91,4 +81,4 @@ df_final['Data Consumption Average'] = data_cons_avrg_column
 df_final['Data Consumption Standard Deviation'] = data_cons_std_column
 df_final['Data Adjustment'] = data_adjustment
 
-df_final.to_excel("output.xlsx")  
+df_final.to_excel("Data Adjustment.xlsx")  
