@@ -4,7 +4,7 @@
 
 #The purporse of this project is to automatize the mobile data plan adjustment in a big company according to the data consumption pf each user of the last three months. 
 
-# Import the necesary libraries 
+# Import the necessary libraries 
 import pandas as pd
 import statistics 
 import sys
