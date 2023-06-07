@@ -4,14 +4,19 @@
 
 #The purporse of this project is to automatize the mobile data plan adjustment in a big company according to the data consumption pf each user of the last three months. 
 
+# Import the necesary libraries 
 import pandas as pd
 import statistics 
+import sys
 
-
+# Data Plan packages
 data_plan_list = [8000000, 10000000, 12000000, 15000000, 20000000, 30000000, 50000000]
+
+# Input from the user
 df_month1 = input('Please enter file path for month 1 to be analyzed: ')
 df_month2 = input('Please enter file path for month 2 to be analyzed: ')
 df_month3 = input('Please enter file path for month 3 to be analyzed: ')
+df_months = [df_month1,df_month2,df_month3]
 
 def file_to_DF(file,number_of_month):
     # Convert file into a dataframe
@@ -40,9 +45,19 @@ def file_to_DF(file,number_of_month):
 
     return df_month 
 
+# Error and exception handling 
+for i in df_months:
+    try:
+        i=file_to_DF(i,1)
+    except ValueError:
+        sys.exit(f"Please upload an .xlsx file from the Base View Export Tool.\n{i} is not the right type of file.")
+    except OSError:
+        sys.exit(f"Please upload an .xlsx file from the Base View Export Tool.\n{i} is not the right type of file.")
+    except UnboundLocalError:
+        sys.exit(f"Please upload an .xlsx file from the Base View Export Tool.\n{i} is not the right type of file.")
+  
 
-#Calling up the functions
-
+# Calling up the functions
 df_month1=file_to_DF(df_month1,1)
 
 df_month2=file_to_DF(df_month2,2)
@@ -83,8 +98,10 @@ for i in df_final.index:
             else:
                 data_adjustment.append(f'The proposed data plan for this phone number is: {new_data_plan(data_consumption_average)} KiB')
 
+# Adding the necessary columns 
 df_final['Data Consumption Average'] = data_cons_avrg_column 
 df_final['Data Consumption Standard Deviation'] = data_cons_std_column
 df_final['Data Adjustment'] = data_adjustment
 
+# Final output
 df_final.to_excel("Data Adjustment.xlsx")  
