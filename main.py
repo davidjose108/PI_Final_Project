@@ -19,6 +19,11 @@ df_month3 = input('Please enter file path for month 3 to be analyzed: ')
 df_months = [df_month1,df_month2,df_month3]
 
 def file_to_DF(file,number_of_month):
+    # Format string to make it readable 
+    file = file.replace("&", "")
+    file = file.replace("'", "")
+    file = file.strip()
+    
     # Convert file into a dataframe
     df = pd.read_excel(file)
 
