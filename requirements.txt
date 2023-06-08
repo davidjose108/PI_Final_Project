@@ -1,0 +1,4 @@
+Make sure to install the following before running the code:
+
+pip install pandas
+pip install openpyxl
