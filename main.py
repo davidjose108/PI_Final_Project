@@ -8,6 +8,10 @@
 import pandas as pd
 import statistics 
 import sys
+import warnings
+
+# In order to avoid "Workbook contains no default style, apply openpyxl's default "warning from pandas bug. 
+warnings.simplefilter("ignore")
 
 # Data Plan packages
 data_plan_list = [8000000, 10000000, 12000000, 15000000, 20000000, 30000000, 50000000]
