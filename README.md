@@ -5,7 +5,7 @@
 
 The purporse of this project is to automatize the mobile data plan adjustment in a big company according to the data consumption for each user of the last three months. 
 
-Each user has a phone number with a data plan package. This data plan package can be of 8, 12, 15, 20, 30 or 50 GB per month. 
+Each user has a phone number with a data plan package. This data plan package can be of x, y, z, w, u or r GB per month. 
 For the purpose of cost reduction, we want to make sure that each user has the data plan package which fits best their consumption. 
 
 For example, a user that has a 8GB is using in month 1, 30GB; in month 2, 32GB; and in month 3, 34GB. 
